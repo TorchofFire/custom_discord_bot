@@ -1,0 +1,36 @@
+{
+  "name": "riddler_bot",
+  "version": "0.0.0",
+  "main": "src/main.{js,ts}",
+  "author": "Torch",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon src/main.ts"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "moment": "^2.30.1",
+    "mysql": "^2.18.1",
+    "node-cron": "^3.0.3",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/mysql": "^2.15.26",
+    "@types/node": "^20.12.2",
+    "@types/node-cron": "^3.0.11",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
