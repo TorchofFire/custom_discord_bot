@@ -15,7 +15,7 @@ const onReady: Listener = {
             }]
         });
 
-        console.log(`-- ${client.user.username} is online. --`);
+        console.log(`\x1b[36m${client.user.username} is online\x1b[0m`);
 
     }
 };

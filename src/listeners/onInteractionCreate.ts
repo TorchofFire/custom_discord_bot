@@ -9,7 +9,6 @@ import { InteractionReplyable } from '../helpers/InteractionReplyable.helper';
 
 const onInteractionCreate: Listener = {
     event: 'interactionCreate',
-    name: 'onInteractionCreate',
     execute: async (interaction: Interaction) => {
         async function errorReply(inter: Interaction, type: string): Promise<void> {
             const interactionReplyable = InteractionReplyable(inter);
