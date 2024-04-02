@@ -4,11 +4,31 @@ import fs from 'fs';
 import appConfig from './app.config';
 import { Listener } from './types/Listener';
 import express, { Router } from 'express';
+import https from 'https';
+import swaggerJsdoc from 'swagger-jsdoc';
+import * as swaggerUi from 'swagger-ui-express';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let discordClient: Client;
 export const expressApp = express();
 const port = 8079;
+
+const swaggerSetup = (): void => {
+    const swaggerOptions: swaggerJsdoc.Options = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'Riddler API',
+                version: '0.0.0',
+                description: 'I used to be an adventurer like you, then I took an arrow in the knee.'
+            }
+        },
+        apis: [path.resolve(__dirname, './routesSwagger/**/*yaml')]
+    };
+
+    const specs = swaggerJsdoc(swaggerOptions);
+    expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+};
 
 const registerExpressRoutes = async (): Promise<void> => {
     const routesPath = path.join(__dirname, 'routes');
@@ -21,8 +41,8 @@ const registerExpressRoutes = async (): Promise<void> => {
         const { default: config } = await import(routeFile);
         const routeConfig = config as Router;
 
-        expressApp.use(route);
-        process.stdout.write(` ${routeConfig.name} |`);
+        expressApp.use(routeConfig);
+        process.stdout.write(` ${route.replace(/\.(js|ts)$/, '')} |`);
     }));
     console.log('\x1b[0m');
     console.log(`Loaded ${routes.length} Routes`);
@@ -74,7 +94,24 @@ export const startup = async (): Promise<void> => {
 
     await registerExpressRoutes();
 
-    expressApp.listen(port, () => {
-        console.log(`\x1b[36mExpress is online and listening on port \x1b[33m${port}\x1b[0m`);
-    });
+    expressApp.use(express.static(path.join(__dirname, 'webScripts')));
+
+    if (process.env.PROD === 'true') {
+        const certPath = process.env.CERT_PATH; // I'd use absolute.
+        if (!certPath) return;
+        const serverOptions: https.ServerOptions = {
+            key: fs.readFileSync(path.join(certPath, 'privkey.pem')),
+            cert: fs.readFileSync(path.join(certPath, 'fullchain.pem'))
+        };
+
+        https.createServer(serverOptions, expressApp).listen(port, () => {
+            console.log(`\x1b[36mExpress is \x1b[33msecurely\x1b[36m online and listening on port \x1b[33m${port}\x1b[0m`);
+        });
+    } else {
+        expressApp.listen(port, () => {
+            console.log(`\x1b[36m\x1b[7m[Development Mode]\x1b[0m\x1b[36m Express is online and listening on port \x1b[33m${port}\x1b[0m`);
+        });
+    }
+
+    swaggerSetup();
 };

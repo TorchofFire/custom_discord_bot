@@ -1,0 +1,6 @@
+/:
+  get:
+    summary: Hello World
+    responses:
+      200:
+        description: Sends "Hello World!" back
