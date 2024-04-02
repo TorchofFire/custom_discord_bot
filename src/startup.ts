@@ -11,7 +11,7 @@ import * as swaggerUi from 'swagger-ui-express';
 // eslint-disable-next-line import/no-mutable-exports
 export let discordClient: Client;
 export const expressApp = express();
-const port = 8079;
+const port = process.env.PORT;
 
 const swaggerSetup = (): void => {
     const swaggerOptions: swaggerJsdoc.Options = {
@@ -94,7 +94,7 @@ export const startup = async (): Promise<void> => {
 
     await registerExpressRoutes();
 
-    expressApp.use(express.static(path.join(__dirname, 'webScripts')));
+    expressApp.use(express.static(path.join(__dirname, 'public')));
 
     if (process.env.PROD === 'true') {
         const certPath = process.env.CERT_PATH; // I'd use absolute.
