@@ -1,5 +1,5 @@
 {
-  "name": "riddler_bot",
+  "name": "custom_bot",
   "version": "0.0.0",
   "main": "src/main.{js,ts}",
   "author": "Torch",
@@ -7,9 +7,10 @@
   "private": true,
   "scripts": {
     "dev": "nodemon src/main.ts",
-    "build": "tsc --build && cp -r src/webScripts dist/webScripts"
+    "build": "tsc --build && cp -r src/public dist/public"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

@@ -11,14 +11,14 @@ import * as swaggerUi from 'swagger-ui-express';
 // eslint-disable-next-line import/no-mutable-exports
 export let discordClient: Client;
 export const expressApp = express();
-const port = process.env.PORT;
+const port = appConfig.appPort;
 
 const swaggerSetup = (): void => {
     const swaggerOptions: swaggerJsdoc.Options = {
         definition: {
             openapi: '3.0.0',
             info: {
-                title: 'Riddler API',
+                title: 'Custom Bot API',
                 version: '0.0.0',
                 description: 'I used to be an adventurer like you, then I took an arrow in the knee.'
             }
@@ -96,8 +96,9 @@ export const startup = async (): Promise<void> => {
 
     expressApp.use(express.static(path.join(__dirname, 'public')));
 
-    if (process.env.PROD === 'true') {
-        const certPath = process.env.CERT_PATH; // I'd use absolute.
+    if (appConfig.secureProtocol) {
+        const certPath = appConfig.certPath;
+        console.log('\x1b[31m No path to the certificate was given! Dashboard is offline.');
         if (!certPath) return;
         const serverOptions: https.ServerOptions = {
             key: fs.readFileSync(path.join(certPath, 'privkey.pem')),
@@ -109,7 +110,7 @@ export const startup = async (): Promise<void> => {
         });
     } else {
         expressApp.listen(port, () => {
-            console.log(`\x1b[36m\x1b[7m[Development Mode]\x1b[0m\x1b[36m Express is online and listening on port \x1b[33m${port}\x1b[0m`);
+            console.log(`\x1b[36mExpress is online and listening on port \x1b[33m${port}\x1b[0m`);
         });
     }
 

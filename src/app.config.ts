@@ -1,16 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
-
-export const isProd = process.env.NODE_ENV === 'production';
-const testBotToken = 'Nzg3NDIzNjAxNTc3MTY0ODAx.GDocKj.1hQ861NxUr-Uofy2Cc99UxIkheUZbTRp1eoACM';
+import 'dotenv/config';
 
 const appConfig = {
-    clientId: isProd
-        ? '' // Riddler
-        : '787423601577164801', // Test Bot
-    riddlerServerId: isProd
-        ? ''
-        : '938599383480561696', // test server
-    botToken: process.env.BOT_TOKEN ?? testBotToken
+    secureProtocol: process.env.SECURE_PROTOCOL === 'true',
+    certPath: process.env.SSL_PATH,
+    botToken: process.env.BOT_TOKEN,
+    appPort: Number(process.env.APP_PORT || 8079)
 };
+
 export default appConfig;
